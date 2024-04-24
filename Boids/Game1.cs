@@ -12,6 +12,14 @@ namespace Boids
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
+            if (GraphicsDevice == null)
+            {
+                _graphics.ApplyChanges();
+            }
+
+            _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
+            _graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
+            _graphics.ApplyChanges();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
