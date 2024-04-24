@@ -1,0 +1,11 @@
+# c# necessary files
+app.manifest
+Icon.bmp
+Icon.ico
+Dependencies
+
+# c# necessary directories
+Content/*
+bin/*
+.config/*
+obj/*
