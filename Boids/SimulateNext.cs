@@ -6,7 +6,18 @@ using System.Threading.Tasks;
 
 namespace Boids
 {
-    internal class SimulateNext
+    public static class SimulateNext
     {
+        static double avoidFactor = 3;
+        static List<Boid> boids = new List<Boid>();
+
+
+        static void Next()
+        {
+            foreach (Boid boid in boids)
+            {
+
+            }
+        }
     }
 }
