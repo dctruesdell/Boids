@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Boids
 {
@@ -8,6 +9,9 @@ namespace Boids
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private Random random = new Random();
+
+        Texture2D circle;
 
         public Game1()
         {
@@ -34,6 +38,7 @@ namespace Boids
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            circle = Content.Load<Texture2D>("circle");
 
             // TODO: use this.Content to load your game content here
         }
@@ -46,10 +51,14 @@ namespace Boids
             // TODO: Add your update logic here
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-                SimulateNext.boids.Add(new Boid(Vector2.Zero,
-                    Vector2.Zero,
-                    3,
-                    10));
+                int x = random.Next(1920);
+                int y = random.Next(1080);
+                int xVel = random.Next(-10, 10);
+                int yVel = random.Next(-10, 10);
+                SimulateNext.boids.Add(new Boid(new Vector2(x, y),
+                    new Vector2(xVel, yVel),
+                    40,
+                    100));
             }
             SimulateNext.Next();
             base.Update(gameTime);
@@ -57,9 +66,17 @@ namespace Boids
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
+            _spriteBatch.Begin();
+
+            foreach (Boid boid in SimulateNext.boids)
+            {
+                _spriteBatch.Draw(circle, boid.position, Color.Cyan);
+            }
+
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
