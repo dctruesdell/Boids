@@ -36,9 +36,9 @@ namespace Boids
         {
             for (int i = 0; i < SimulateNext.boids.Count; i++)
             {
+                Vector2 newVelocity = Vector2.Zero;
                 if (GroupFuncs.FindDistance(this.position, SimulateNext.boids[i].position) <= _protectedRange)
                 {
-                    Vector2 newVelocity = Vector2.Zero;
                     newVelocity += this.position - SimulateNext.boids[i].position;
                     this.velocity += newVelocity * SimulateNext.avoidFactor;
                 }
@@ -58,6 +58,20 @@ namespace Boids
             }
             this.velocity += GroupFuncs.AveragePosition(nearbyBoids) * SimulateNext.groupingFactor;
         } 
+
+        public void Align()
+        {
+            List<Vector2> nearbyBoids = new List<Vector2>();
+
+            for (int i = 0; i < SimulateNext.boids.Count; i++)
+            {
+                if (GroupFuncs.FindDistance(this.position, SimulateNext.boids[i].position) <= _sightRange)
+                {
+                    nearbyBoids.Add(SimulateNext.boids[i].velocity);
+                }
+            }
+            this.velocity += GroupFuncs.AveragePosition(nearbyBoids) * SimulateNext.alignFactor;
+        }
 
         public void Move()
         {

@@ -51,14 +51,14 @@ namespace Boids
             // TODO: Add your update logic here
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-                int x = random.Next(1920);
-                int y = random.Next(1080);
-                int xVel = random.Next(-10, 10);
-                int yVel = random.Next(-10, 10);
+                int x = random.Next(1920 / 4);
+                int y = random.Next(1080 / 4);
+                int xVel = random.Next(-30, 30);
+                int yVel = random.Next(-30, 30);
                 SimulateNext.boids.Add(new Boid(new Vector2(x, y),
                     new Vector2(xVel, yVel),
-                    40,
-                    100));
+                    200,
+                    400));
             }
             SimulateNext.Next();
             base.Update(gameTime);

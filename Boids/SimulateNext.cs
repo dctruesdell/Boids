@@ -9,8 +9,12 @@ namespace Boids
 {
     public static class SimulateNext
     {
-        public static float avoidFactor = 0.03f;
-        public static float groupingFactor = 0.03f;
+        public static float avoidFactor = 500f;
+        public static float groupingFactor = 650f;
+        public static float alignFactor = 400f;
+
+        private static int maxSpeed = 10;
+
         public static List<Boid> boids = new List<Boid>();
 
 
@@ -21,21 +25,19 @@ namespace Boids
             {
                 boids[i].Avoid();
                 boids[i].FollowCenter();
-                if ( 
-                    (0 >= boids[i].position.X || 1080 > boids[i].position.X)
-                    || 
-                    (0 > boids[i].position.Y || boids[i].position.Y > 1920))
-                {
-                    boids[i].velocity *= -1;
-                }
+                boids[i].Align();
 
-                {
-
-                }
             }
             for (int i = 0; i < boids.Count; i++)
             {
+                if (boids[i].velocity.Length() > maxSpeed)
+                {
+                    boids[i].velocity.Normalize();
+                    boids[i].velocity *= maxSpeed;
+                }
+
                 boids[i].Move();
+                boids[i].velocity = Vector2.Zero;
 
             }
 
