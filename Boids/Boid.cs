@@ -29,5 +29,7 @@ namespace Boids
             get { return _sightRange; }
         }
 
+        public void
+
     }
 }
