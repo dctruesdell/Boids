@@ -8,11 +8,11 @@ namespace Boids
 {
     public static class SimulateNext
     {
-        static double avoidFactor = 3;
-        static List<Boid> boids = new List<Boid>();
+        public static float avoidFactor = 3;
+        public static List<Boid> boids = new List<Boid>();
 
 
-        static void Next()
+        public static void Next()
         {
             foreach (Boid boid in boids)
             {

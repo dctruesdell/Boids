@@ -29,7 +29,13 @@ namespace Boids
             get { return _sightRange; }
         }
 
-        public void
+        public void avoid(Boid other)
+        {
+            if (GroupFuncs.FindDistance(this.position, other.position)  <= _protectedRange)
+            {
+                for 
+            }
+        }
 
     }
 }
