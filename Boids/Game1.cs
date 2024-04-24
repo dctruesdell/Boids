@@ -44,7 +44,14 @@ namespace Boids
                 Exit();
 
             // TODO: Add your update logic here
-
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                SimulateNext.boids.Add(new Boid(Vector2.Zero,
+                    Vector2.Zero,
+                    3,
+                    10));
+            }
+            SimulateNext.Next();
             base.Update(gameTime);
         }
 

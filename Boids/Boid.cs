@@ -11,12 +11,15 @@ namespace Boids
     {
         public Vector2 position;
         public Vector2 velocity;
-        private double _protectedRange;
-        private double _sightRange;
+        private float _protectedRange;
+        private float _sightRange;
 
-        public Boid()
+        public Boid(Vector2 position, Vector2 velocity, float protectedRange, float sightRange)
         {
-            // construct
+            this.position = position;
+            this.velocity = velocity;
+            this._protectedRange = protectedRange;
+            this._sightRange = sightRange;
         }
 
         public double ProtectedRange
