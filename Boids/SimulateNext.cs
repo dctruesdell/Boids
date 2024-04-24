@@ -15,10 +15,17 @@ namespace Boids
 
         public static void Next()
         {
-            foreach (Boid boid in boids)
+            // two loops so that things don't move around while we calculate the next velocity.
+            for (int i = 0; i < boids.Count; i++)
             {
-
+                boids[i].Avoid();
+                boids[i].FollowCenter();
             }
+            for (int i = 0; i < boids.Count; i++)
+            {
+                boids[i].Move();
+            }
+
         }
     }
 }

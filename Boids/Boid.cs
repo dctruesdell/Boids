@@ -29,13 +29,16 @@ namespace Boids
             get { return _sightRange; }
         }
 
-        public void Avoid(Boid other)
+        public void Avoid()
         {
-            if (GroupFuncs.FindDistance(this.position, other.position)  <= _protectedRange)
+            for (int i = 0; i < SimulateNext.boids.Count; i++)
             {
-                Vector2 newVelocity = Vector2.Zero;
-                newVelocity += this.position - other.position;
-                this.velocity += newVelocity * SimulateNext.avoidFactor;
+                if (GroupFuncs.FindDistance(this.position, SimulateNext.boids[i].position) <= _protectedRange)
+                {
+                    Vector2 newVelocity = Vector2.Zero;
+                    newVelocity += this.position - SimulateNext.boids[i].position;
+                    this.velocity += newVelocity * SimulateNext.avoidFactor;
+                }
             }
         }
 
@@ -52,5 +55,10 @@ namespace Boids
             }
             this.velocity += GroupFuncs.AveragePosition(nearbyBoids) * SimulateNext.groupingFactor;
         } 
+
+        public void Move()
+        {
+            this.position += this.velocity;
+        }
     }
 }
