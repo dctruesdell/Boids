@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
@@ -11,6 +12,7 @@ namespace Boids
     {
         public Vector2 position;
         public Vector2 velocity;
+        public Vector2 nextVelocity;
         private float _protectedRange;
         private float _sightRange;
 
@@ -20,6 +22,7 @@ namespace Boids
             this.velocity = velocity;
             this._protectedRange = protectedRange;
             this._sightRange = sightRange;
+            this.nextVelocity = this.velocity;
         }
 
         public double ProtectedRange
@@ -34,29 +37,29 @@ namespace Boids
 
         public void Avoid()
         {
+            List<Vector2> velocities = new List<Vector2>();
             for (int i = 0; i < SimulateNext.boids.Count; i++)
             {
-                Vector2 newVelocity = Vector2.Zero;
-                if (GroupFuncs.FindDistance(this.position, SimulateNext.boids[i].position) <= _protectedRange)
+               
+                float distance = GroupFuncs.FindDistance(position, SimulateNext.boids[i].position);
+                if (distance <= _protectedRange && distance <= _sightRange)
                 {
-                    newVelocity += this.position - SimulateNext.boids[i].position;
-                    this.velocity += newVelocity * SimulateNext.avoidFactor;
+                    Vector2 newVelocity = SimulateNext.boids[i].position;
+                    velocities.Add(newVelocity);
                 }
             }
+            if (velocities.Count > 0)
+            {
+                nextVelocity += -1 * ((position - GroupFuncs.AverageVectors(velocities)) * SimulateNext.avoidFactor);
+            }
+            
         }
 
         public void FollowCenter()
         {
-            List<Vector2> nearbyBoids = new List<Vector2>();
-            
-            for (int i = 0; i < SimulateNext.boids.Count; i++)
-            {
-                if (GroupFuncs.FindDistance(this.position, SimulateNext.boids[i].position) <= _sightRange)
-                {
-                    nearbyBoids.Add(SimulateNext.boids[i].position);
-                }
-            }
-            this.velocity += GroupFuncs.AveragePosition(nearbyBoids) * SimulateNext.groupingFactor;
+            Vector2 center = GroupFuncs.CenterOfMass();
+
+            nextVelocity += (center) * SimulateNext.groupingFactor;
         } 
 
         public void Align()
@@ -65,17 +68,22 @@ namespace Boids
 
             for (int i = 0; i < SimulateNext.boids.Count; i++)
             {
-                if (GroupFuncs.FindDistance(this.position, SimulateNext.boids[i].position) <= _sightRange)
+                float distance = GroupFuncs.FindDistance(position, SimulateNext.boids[i].position);
+                if (distance <= _sightRange && distance > _protectedRange)
                 {
                     nearbyBoids.Add(SimulateNext.boids[i].velocity);
                 }
             }
-            this.velocity += GroupFuncs.AveragePosition(nearbyBoids) * SimulateNext.alignFactor;
+            if ( nearbyBoids.Count > 0 )
+            {
+                nextVelocity += (GroupFuncs.AverageVectors(nearbyBoids) - position ) * SimulateNext.alignFactor;
+            }
+            
         }
 
         public void Move()
         {
-            this.position += this.velocity;
+            position += velocity;
         }
     }
 }

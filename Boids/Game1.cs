@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Diagnostics;
 
 namespace Boids
 {
@@ -12,6 +13,7 @@ namespace Boids
         private Random random = new Random();
 
         Texture2D circle;
+        private int startingNumOfBoids = 10;
 
         public Game1()
         {
@@ -32,6 +34,11 @@ namespace Boids
         {
             // TODO: Add your initialization logic here
 
+            for (int i = 0; i < startingNumOfBoids; i++)
+            {
+                GroupFuncs.AddBoid();
+            }
+            
             base.Initialize();
         }
 
@@ -51,14 +58,16 @@ namespace Boids
             // TODO: Add your update logic here
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-                int x = random.Next(1920 / 4);
-                int y = random.Next(1080 / 4);
-                int xVel = random.Next(-30, 30);
-                int yVel = random.Next(-30, 30);
-                SimulateNext.boids.Add(new Boid(new Vector2(x, y),
-                    new Vector2(xVel, yVel),
-                    200,
-                    400));
+                GroupFuncs.AddBoid();
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.C))
+            {
+                SimulateNext.boids.Clear();
+                for (int i = 0; i < startingNumOfBoids; i++)
+                {
+                    GroupFuncs.AddBoid();
+                }
             }
             SimulateNext.Next();
             base.Update(gameTime);
