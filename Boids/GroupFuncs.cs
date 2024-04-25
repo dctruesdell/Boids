@@ -54,8 +54,8 @@ namespace Boids
             Random r = new Random();
             SimulateNext.boids.Add(new Boid(new Vector2(r.Next(50, 1000), r.Next(50, 1000)),
                 new Vector2(r.Next(-10, 10), r.Next(-10, 10)),
-                20,
-                100));
+                50,
+                200));
         }
     }
 }
