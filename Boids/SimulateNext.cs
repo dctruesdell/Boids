@@ -10,11 +10,17 @@ namespace Boids
 {
     public static class SimulateNext
     {
-        public static float avoidFactor = .05f;
-        public static float groupingFactor = .07f;
-        public static float alignFactor = .09f;
 
-        private static int maxSpeed = 5;
+        public static float avoidFactor = 0.5f;
+        public static float groupingFactor = .07f;
+        public static float alignFactor = .009f;
+=======
+        public static float avoidFactor = +5f;
+        public static float groupingFactor = 2f;
+        public static float alignFactor = 4f;
+>>>>>>> parent of 3e4cf9b (Fixed Avoid)
+
+        private static int maxSpeed = 10;
 
         public static List<Boid> boids = new List<Boid>();
 
@@ -24,11 +30,17 @@ namespace Boids
             // two loops so that things don't move around while we calculate the next velocity.
             for (int i = 0; i < boids.Count; i++)
             {
+<<<<<<< HEAD
                 //boids[i].nextVelocity = Vector2.Zero;
 
-                boids[i].FollowCenter();
                 boids[i].Align();
+                boids[i].FollowCenter();
+=======
+                boids[i].nextVelocity = Vector2.Zero;
+>>>>>>> parent of 3e4cf9b (Fixed Avoid)
                 boids[i].Avoid();
+                boids[i].FollowCenter();
+                boids[i].Align();;
             }
             for (int i = 0; i < boids.Count; i++)
             {

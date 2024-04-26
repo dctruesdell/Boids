@@ -37,35 +37,29 @@ namespace Boids
 
         public void Avoid()
         {
-            Vector2 newVelocity = Vector2.Zero;
+            List<Vector2> velocities = new List<Vector2>();
             for (int i = 0; i < SimulateNext.boids.Count; i++)
             {
+               
                 float distance = GroupFuncs.FindDistance(position, SimulateNext.boids[i].position);
-                if (distance <= _protectedRange)
+                if (distance <= _protectedRange && distance <= _sightRange)
                 {
-                    newVelocity += SimulateNext.boids[i].position;
+                    Vector2 newVelocity = SimulateNext.boids[i].position;
+                    velocities.Add(newVelocity);
                 }
             }
-             nextVelocity += (newVelocity - position) * SimulateNext.avoidFactor;
+            if (velocities.Count > 0)
+            {
+                nextVelocity += -1 * ((position - GroupFuncs.AverageVectors(velocities)) * SimulateNext.avoidFactor);
+            }
             
         }
 
         public void FollowCenter()
         {
-            List<Vector2> nearby = new List<Vector2>();
-            for (int i = 0; i < SimulateNext.boids.Count; i++)
-            {
-                float distance = GroupFuncs.FindDistance(position, SimulateNext.boids[i].position);
-                if (distance <= _sightRange)
-                {
-                    nearby.Add(SimulateNext.boids[i].position);
-                }
-            }
-            if (nearby.Count != 0)
-            {
-                nextVelocity += (position - GroupFuncs.AverageVectors(nearby)) * SimulateNext.groupingFactor;
-            }
+            Vector2 center = GroupFuncs.CenterOfMass();
 
+            nextVelocity += (center) * SimulateNext.groupingFactor;
         } 
 
         public void Align()
