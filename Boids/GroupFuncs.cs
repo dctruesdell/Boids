@@ -47,16 +47,17 @@ namespace Boids
             x *= x;
             y *= y;
 
-            return (float)Math.Sqrt(x + y);
+            float sqrt = (float)Math.Sqrt(x + y);
+            return (float)Math.Abs(sqrt);
         }
 
         public static void AddBoid()
         {
             Random r = new Random();
-            SimulateNext.boids.Add(new Boid(new Vector2(r.Next(0, 1000), r.Next(0, 1000)),
+            SimulateNext.boids.Add(new Boid(new Vector2(r.Next(50, 1000), r.Next(50, 1000)),
                 new Vector2(r.Next(-1, 1), r.Next(-1, 1)),
-                50,
-                100));
+                100,
+                250));
         }
     }
 }

@@ -90,7 +90,7 @@ namespace Boids
 
             int width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             int height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            int margin = 20;
+            int margin = 40;
             if (position.X > width - margin)
             {
                 position.X = 0 + margin;
