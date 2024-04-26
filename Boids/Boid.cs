@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Boids
 {
@@ -37,53 +39,75 @@ namespace Boids
 
         public void Avoid()
         {
-            List<Vector2> velocities = new List<Vector2>();
-            for (int i = 0; i < SimulateNext.boids.Count; i++)
+            Vector2 all = Vector2.Zero;
+            for (int i = 0; i < SimulateNext.boids.Count; ++i)
             {
-               
-                float distance = GroupFuncs.FindDistance(position, SimulateNext.boids[i].position);
-                if (distance <= _protectedRange && distance <= _sightRange)
+                if (SimulateNext.boids[0] != this
+                    &&
+                    GroupFuncs.FindDistance(position, SimulateNext.boids[i].position) <= _protectedRange)
                 {
-                    Vector2 newVelocity = SimulateNext.boids[i].position;
-                    velocities.Add(newVelocity);
+                    all += SimulateNext.boids[0].position;
                 }
             }
-            if (velocities.Count > 0)
-            {
-                nextVelocity += -1 * ((position - GroupFuncs.AverageVectors(velocities)) * SimulateNext.avoidFactor);
-            }
-            
+            Vector2 average = all / (SimulateNext.boids.Count - 1);
+            velocity += -1 * average * SimulateNext.avoidFactor;
+
         }
 
         public void FollowCenter()
         {
-            Vector2 center = GroupFuncs.CenterOfMass();
-
-            nextVelocity += (center) * SimulateNext.groupingFactor;
-        } 
+            Vector2 all = Vector2.Zero;
+            for (int i = 0; i < SimulateNext.boids.Count; ++i)
+            {
+                if (SimulateNext.boids[0] != this)
+                {
+                    all += SimulateNext.boids[0].position;
+                }
+            }
+            Vector2 average = all / (SimulateNext.boids.Count - 1);
+            velocity += average * SimulateNext.groupingFactor;
+        }
 
         public void Align()
         {
-            List<Vector2> nearbyBoids = new List<Vector2>();
-
-            for (int i = 0; i < SimulateNext.boids.Count; i++)
+            Vector2 all = Vector2.Zero;
+            for (int i = 0; i < SimulateNext.boids.Count; ++i)
             {
-                float distance = GroupFuncs.FindDistance(position, SimulateNext.boids[i].position);
-                if (distance <= _sightRange && distance > _protectedRange)
+                if (SimulateNext.boids[0] != this
+                    &&
+                    GroupFuncs.FindDistance(this.position, SimulateNext.boids[i].position) <= _sightRange)
                 {
-                    nearbyBoids.Add(SimulateNext.boids[i].velocity);
+                    all += SimulateNext.boids[0].velocity;
                 }
             }
-            if ( nearbyBoids.Count > 0 )
-            {
-                nextVelocity += (GroupFuncs.AverageVectors(nearbyBoids) - position ) * SimulateNext.alignFactor;
-            }
-            
+            Vector2 average = all / (SimulateNext.boids.Count - 1);
+            velocity += average * SimulateNext.alignFactor;
         }
 
         public void Move()
         {
             position += velocity;
+
+            int width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            int height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            int margin = 20;
+            if (position.X > width - margin)
+            {
+                position.X = 0 + margin;
+            }
+            else if (position.X < 0 + margin)
+            {
+                position.X = width - margin;
+            }
+
+            if (position.Y > height - margin)
+            {
+                position.Y = 0 + margin;
+            }
+            else if (position.Y < 0)
+            {
+                position.Y = height - margin;
+            }
         }
     }
 }

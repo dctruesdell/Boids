@@ -13,7 +13,7 @@ namespace Boids
         private Random random = new Random();
 
         Texture2D circle;
-        private int startingNumOfBoids = 10;
+        private int startingNumOfBoids = 100;
 
         public Game1()
         {

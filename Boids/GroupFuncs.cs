@@ -13,6 +13,7 @@ namespace Boids
         {
             if (vectors.Count == 0)
             {
+                return new Vector2 (0, 0);
             } 
             float x = 0;
             float y = 0;
@@ -52,9 +53,9 @@ namespace Boids
         public static void AddBoid()
         {
             Random r = new Random();
-            SimulateNext.boids.Add(new Boid(new Vector2(r.Next(50, 1000), r.Next(50, 1000)),
-                new Vector2(r.Next(-10, 10), r.Next(-10, 10)),
-                20,
+            SimulateNext.boids.Add(new Boid(new Vector2(r.Next(0, 1000), r.Next(0, 1000)),
+                new Vector2(r.Next(-1, 1), r.Next(-1, 1)),
+                50,
                 100));
         }
     }
